@@ -1,6 +1,7 @@
 import Overlay from "./overlay/Overlay";
 import "./Board.css";
 import { useState } from "react";
+import Tile from "./tile/Tile";
 
 const Board = () => {
   const shuffle = () =>
@@ -17,7 +18,7 @@ const Board = () => {
       <div className="board">
         <Overlay />
         {numbers.map((x, i) => (
-          <div key={i}>{x.value}</div>
+          <Tile key={i} number={x} />
         ))}
       </div>
     </div>
