@@ -1,6 +1,6 @@
 import Overlay from "./overlay/Overlay";
 import "./Board.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Tile from "./tile/Tile";
 
 const Board = () => {
@@ -27,6 +27,27 @@ const Board = () => {
     setNumbers(newNumbers);
     // setTimeout(() => setAnimating(false), 200)
   };
+
+  const handleKeyDown = (e) => {
+    const i16 = numbers.find((n) => n.value === 16).index;
+    if (e.keyCode === 37 && !(i16 % 4 === 3))
+      moveTile(numbers.find((n) => n.index === i16 + 1));
+    else if (e.keyCode === 38 && !(i16 > 11))
+      moveTile(numbers.find((n) => n.index === i16 + 4));
+    else if (e.keyCode === 39 && !(i16 % 4 === 0))
+      moveTile(numbers.find((n) => n.index === i16 - 1));
+    else if (e.keyCode === 40 && !(i16 < 4))
+      moveTile(numbers.find((n) => n.index === i16 - 4));
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  // useEffect(reset, [])
 
   return (
     <div className="game">
