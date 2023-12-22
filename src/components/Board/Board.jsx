@@ -12,10 +12,14 @@ const Board = () => {
       .map((x, i) => ({ value: x, index: i }));
 
   const [numbers, setNumbers] = useState(shuffle());
+  const [animating, setAnimating] = useState(false);
 
   const moveTile = (tile) => {
     const i16 = numbers.find((n) => n.value === 16).index;
-    if (![i16 - 1, i16 + 1, i16 - 4, i16 + 4].includes(tile.index)) return;
+    if (
+      ![i16 - 1, i16 + 1, i16 - 4, i16 + 4].includes(tile.index) ||
+      animating
+    );
 
     const newNumbers = [...numbers].map((number) => {
       if (number.index !== i16 && number.index !== tile.index) return number;
@@ -23,9 +27,9 @@ const Board = () => {
 
       return { value: tile.value, index: i16 };
     });
-    // setAnimating(true)
+    setAnimating(true);
     setNumbers(newNumbers);
-    // setTimeout(() => setAnimating(false), 200)
+    setTimeout(() => setAnimating(false), 400);
   };
 
   const handleKeyDown = (e) => {
