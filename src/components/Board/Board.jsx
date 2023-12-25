@@ -1,7 +1,9 @@
-import Overlay from "./overlay/Overlay";
-import "./Board.css";
 import { useEffect, useState } from "react";
-import Tile from "./tile/Tile";
+import "./Board.css";
+import Tile from "../tile/Tile";
+import Overlay from "../overlay/Overlay";
+import NewGame from "../New-Game/NewGame";
+import Winner from "../Winner/Winner";
 
 const Board = () => {
   const shuffle = () =>
@@ -11,11 +13,15 @@ const Board = () => {
       .sort(() => Math.random() - 0.5)
       .map((x, i) => ({ value: x, index: i }));
 
-  const [numbers, setNumbers] = useState(shuffle());
+  const [numbers, setNumbers] = useState([]);
+  const [animating, setAnimating] = useState(false);
+
+  const reset = () => setNumbers(shuffle());
 
   const moveTile = (tile) => {
     const i16 = numbers.find((n) => n.value === 16).index;
-    if (![i16 - 1, i16 + 1, i16 - 4, i16 + 4].includes(tile.index)) return;
+    if (![i16 - 1, i16 + 1, i16 - 4, i16 + 4].includes(tile.index) || animating)
+      return;
 
     const newNumbers = [...numbers].map((number) => {
       if (number.index !== i16 && number.index !== tile.index) return number;
@@ -23,9 +29,9 @@ const Board = () => {
 
       return { value: tile.value, index: i16 };
     });
-    // setAnimating(true)
+    setAnimating(true);
     setNumbers(newNumbers);
-    // setTimeout(() => setAnimating(false), 200)
+    setTimeout(() => setAnimating(false), 200);
   };
 
   const handleKeyDown = (e) => {
@@ -47,16 +53,18 @@ const Board = () => {
     };
   });
 
-  // useEffect(reset, [])
+  useEffect(reset, []);
 
   return (
     <div className="game">
       <div className="board">
-        <Overlay />
-        {numbers.map((x, i) => (
-          <Tile key={i} number={x} moveTile={moveTile} />
-        ))}
+        <Overlay size={16} />
+        {numbers.map((x, i) => {
+          return <Tile key={i} number={x} moveTile={moveTile} />;
+        })}
       </div>
+      <Winner numbers={numbers} reset={reset} />
+      <NewGame reset={reset} />
     </div>
   );
 };
