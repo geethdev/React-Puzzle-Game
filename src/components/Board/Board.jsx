@@ -1,14 +1,15 @@
-import Overlay from "./overlay/Overlay";
+import Overlay from "../overlay/Overlay";
 import "./Board.css";
 import { useEffect, useState } from "react";
-import Tile from "./tile/Tile";
+import Tile from "../tile/Tile";
+import Winner from "../Winner/Winner";
 
 const Board = () => {
   const shuffle = () =>
     new Array(16)
       .fill()
       .map((_, i) => i + 1)
-      .sort(() => Math.random() - 0.5)
+      //.sort(() => Math.random() - 0.5)
       .map((x, i) => ({ value: x, index: i }));
 
   const [numbers, setNumbers] = useState(shuffle());
@@ -61,6 +62,7 @@ const Board = () => {
           <Tile key={i} number={x} moveTile={moveTile} />
         ))}
       </div>
+      <Winner numbers={numbers} />
     </div>
   );
 };
