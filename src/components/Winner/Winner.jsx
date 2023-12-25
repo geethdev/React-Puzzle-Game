@@ -1,4 +1,4 @@
-//import NewGame from '../new-game/NewGame'
+import NewGame from "../New-Game/NewGame";
 import "./Winner.css";
 
 const Winner = ({ numbers, reset }) => {
@@ -7,7 +7,7 @@ const Winner = ({ numbers, reset }) => {
   return (
     <div className="winner">
       <p>You win!</p>
-      {/* <NewGame reset={reset} /> */}
+      <NewGame reset={reset} />
     </div>
   );
 };
